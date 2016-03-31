@@ -18,6 +18,7 @@ $g_login_method          = BASIC_AUTH;
 $g_allow_signup          = OFF;
 $g_allow_anonymous_login = OFF;
 $g_anonymous_account     = '';
+$g_allow_blank_email     = ON;
 ```
 
 # Credits

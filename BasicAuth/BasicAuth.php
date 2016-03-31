@@ -1,5 +1,7 @@
 <?php
 
+require_api( 'authentication_api.php');
+
 class BasicAuthPlugin extends MantisPlugin {
     function register() {
         $this->name        = 'BasicAuth Plugin';
@@ -25,9 +27,16 @@ class BasicAuthPlugin extends MantisPlugin {
             trigger_error( "Invalid login method. ($t_login_method)", ERROR );
         }
 
+        if ( ON != config_get( 'allow_blank_email' ) ) {
+            trigger_error( "Must set g_allow_blank_email to ON.", ERROR );
+        }
+
         $t_user_id = user_get_id_by_name($_SERVER['REMOTE_USER']);
         if ( !$t_user_id ) {
-            trigger_error( 'Invalid user.', ERROR );
+            $t_user_id = auth_auto_create_user($_SERVER['REMOTE_USER'], "");
+            if ( !$t_user_id ) {
+               trigger_error( "Could not create user. :(");
+            }
         }
 
         user_increment_login_count( $t_user_id );
